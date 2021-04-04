@@ -6,11 +6,12 @@ class Api::V1::AccountsController < ApplicationController
    
        def create
         @account = Account.new(account_params)
-        if @account.save
+          @account.save
            render json: @account
-        else
-           render json: {error: 'ERROR CREATING ACCOUNT' }
-       end 
+      #   else
+      #      render json: {error: 'ERROR CREATING ACCOUNT' }
+      #  end 
+      end 
    
        def show
         @account = Account.find(params[:id])
@@ -22,6 +23,13 @@ class Api::V1::AccountsController < ApplicationController
          @account.destroy
        end 
    
+       def update 
+        @account = Account.find(params[:id])
+        @account.update(name: params['account']['name'])
+        @account.save
+        render json: @account
+
+       end 
        private
    
        def account_params

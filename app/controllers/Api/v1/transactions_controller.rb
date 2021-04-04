@@ -14,14 +14,26 @@ class Api::V1::TransactionsController < ApplicationController
         @transaction = @account.transactions.new(transaction_params)
         if @account.update_balance(@transaction) !=  'Balance too low , Time to fillup your artist wallet'
             @transaction.save
-            render json: @transaction
+            render json: @account
 
         else
             render json: {error: 'Balance too low , Time to fillup your artist wallet'}
         end 
 
-        end
-       end 
+
+        
+      def destroy
+        @transaction = Transaction.find(params['id'])
+        @account = Account.find(@transaction.account_id)
+        if @account.update_balance_on_delete(@transaction)
+        @transaction.destroy
+        render json: @account
+        else 
+          render json: {error: 'Balance too low'}
+        end 
+
+      end 
+    end
    
      
    
@@ -32,7 +44,7 @@ class Api::V1::TransactionsController < ApplicationController
        end 
    
        def transaction_params
-         params.require(:transaction).permit(:amount, :balance, :account_id, :kind, :date, :description)
+         params.require(:transaction).permit(:amount, :balance, :category, :account_id, :kind, :date, :description)
        end
    
 end

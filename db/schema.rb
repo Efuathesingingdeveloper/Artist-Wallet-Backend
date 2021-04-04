@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2021_03_15_152249) do
 
   create_table "transactions", force: :cascade do |t|
     t.integer "account_id"
+    t.string "category"
     t.float "amount"
     t.string "kind"
     t.datetime "date"
